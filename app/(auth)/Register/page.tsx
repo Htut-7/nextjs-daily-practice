@@ -36,7 +36,7 @@ function Page() {
                 throw new Error(result.message)
             }
 
-            router.push("/login");
+            router.push("/Login");
             router.refresh();
 
         }catch{
