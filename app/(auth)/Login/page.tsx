@@ -1,5 +1,6 @@
 "use client";
 
+import OAuthButton from '@/components/OAuthButton';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
@@ -62,6 +63,9 @@ if (!result || result.error) {
             <button type='submit' disabled={loading}>
                 {loading ? "Loading..." : "Login"}
             </button>
+
+          <OAuthButton/>
+
         </div>
       </form>
     </div>

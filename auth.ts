@@ -4,7 +4,9 @@ import loginSchema from "./lib/schema/loginSchema"
 import dbConnect from "./lib/dbConnect";
 import User from "./db/user.model";
 import bcrypt from "bcryptjs";
- 
+import Google from "next-auth/providers/google"; 
+import GitHub from "next-auth/providers/github";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [Credentials({
     async authorize(credential){
@@ -31,5 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
         return null;
     }
-  })],
+  }),
+  Google, GitHub,
+],
 })
