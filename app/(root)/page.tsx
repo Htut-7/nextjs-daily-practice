@@ -1,8 +1,12 @@
 import { auth } from '@/auth'
 import Logout from '@/components/Logout';
 import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import ROUTES from '@/ROUTES';
+import dbConnect from '@/lib/dbConnect';
 
 import React from 'react'
+import User from '@/db/user.model';
 
 async function page() {
 
@@ -12,7 +16,11 @@ async function page() {
     redirect("/Login");
   }
 
-  console.log(session);
+  await dbConnect();
+
+  const currentUser=await User.findById(session.user.id)
+                    .select("name email")
+                    .lean();
 
  return (
     <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-10 text-white">
@@ -24,6 +32,16 @@ async function page() {
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-500 text-xl font-bold">
                 A
               </div>
+
+             {session.user.id && (
+  <Link
+    href={ROUTES.PROFILE(session.user.id)}
+    className="mt-2 inline-flex items-center gap-2 rounded-lg bg-indigo-500/10 px-3 py-2 text-sm font-medium text-indigo-300 transition hover:bg-indigo-500/20 hover:text-indigo-200"
+  >
+    View My Profile
+    <span aria-hidden="true">→</span>
+  </Link>
+)}
 
               <div>
                 <h2 className="text-lg font-bold tracking-tight">
@@ -66,22 +84,22 @@ async function page() {
         <div className="space-y-5 px-6 py-8 sm:px-10">
           <div className="rounded-2xl border border-white/10 bg-slate-800/50 p-5 transition-colors hover:border-indigo-500/30">
             <p className="text-sm text-slate-400">Full Name</p>
-            <p className="mt-2 break-words text-lg font-semibold text-white">
-              {session.user.name ?? "not available"}
+            <p className="mt-2 wrap-break-word text-lg font-semibold text-white">
+              {currentUser.name ?? "not available"}
             </p>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-slate-800/50 p-5 transition-colors hover:border-indigo-500/30">
             <p className="text-sm text-slate-400">Email Address</p>
             <p className="mt-2 break-all font-semibold text-white">
-              {session.user.email ?? "not available"}
+              {currentUser.email ?? "not available"}
             </p>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-slate-800/50 p-5 transition-colors hover:border-indigo-500/30">
             <p className="text-sm text-slate-400">User ID</p>
             <p className="mt-2 break-all font-mono text-sm text-sky-300">
-              {session.user.id}
+              {currentUser._id.toString()}
             </p>
           </div>
 
