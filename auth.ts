@@ -38,9 +38,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 ],
 
   callbacks:{
-    async jwt({token,user}){
-      if(user){
+    async jwt({token,user,account}){
+      if(user && account?.provider==="credentials"){
         token.sub=user.id;
+      }
+
+      if(account && ["google","github"].includes (account.provider) && token.email ){
+        await dbConnect();
+
+        const existingUser=await User.findOne({email: token.email,}).select("_id");
+
+        if(existingUser){
+          token.sub=existingUser._id.toString();
+        }
       }
       return token;
     },
