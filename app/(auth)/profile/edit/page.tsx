@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import EditProfile from "@/components/EditProfile";
-import { GetUserById } from "@/lib/action/getUserById.action";
+import { getUserById } from "@/lib/action/GetUserById.action";
 import { redirect } from "next/navigation";
 
 async function page() {
@@ -10,7 +10,7 @@ async function page() {
     redirect("/Login");
   }
 
-  const result = await GetUserById({
+  const result = await getUserById({
     userId: session.user.id,
   });
 
