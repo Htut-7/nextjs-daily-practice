@@ -16,11 +16,18 @@ async function page() {
     redirect("/Login");
   }
 
+  console.log(session);
+  
+
   await dbConnect();
 
-  const currentUser=await User.findById(session.user.id)
+  const currentUser=await User.findOne({email: session.user.email})
                     .select("name email")
                     .lean();
+
+                    console.log("Session user:", session.user);
+console.log("Email used for lookup:", session.user.email);
+console.log("MongoDB user found:", currentUser);
 
  return (
     <main className="flex min-h-screen items-center justify-center bg-slate-950 px-4 py-10 text-white">
@@ -85,21 +92,21 @@ async function page() {
           <div className="rounded-2xl border border-white/10 bg-slate-800/50 p-5 transition-colors hover:border-indigo-500/30">
             <p className="text-sm text-slate-400">Full Name</p>
             <p className="mt-2 wrap-break-word text-lg font-semibold text-white">
-              {currentUser.name ?? "not available"}
+              {currentUser?.name ?? "not available"}
             </p>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-slate-800/50 p-5 transition-colors hover:border-indigo-500/30">
             <p className="text-sm text-slate-400">Email Address</p>
             <p className="mt-2 break-all font-semibold text-white">
-              {currentUser.email ?? "not available"}
+              {currentUser?.email ?? "not available"}
             </p>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-slate-800/50 p-5 transition-colors hover:border-indigo-500/30">
             <p className="text-sm text-slate-400">User ID</p>
             <p className="mt-2 break-all font-mono text-sm text-sky-300">
-              {currentUser._id.toString()}
+              {currentUser?._id.toString()}
             </p>
           </div>
 

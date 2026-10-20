@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { GetUserById } from "@/lib/action/getUserById.action";
+import {getUserById} from "@/lib/action/GetUserById.action";
 import ROUTES from "@/ROUTES";
 import Link from "next/link";
 
@@ -7,7 +7,7 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const session = await auth();
 
-  const result = await GetUserById({ userId: id });
+  const result = await getUserById({ userId: id });
 
   if (!result.success || !result.data?.user) {
     return (

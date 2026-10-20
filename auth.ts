@@ -46,11 +46,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if(account && ["google","github"].includes (account.provider) && token.email ){
         await dbConnect();
 
-        const existingUser=await User.findOne({email: token.email,}).select("_id");
+        let existingUser=await User.findOne({email: token.email,}).select("_id name email");
 
-        if(existingUser){
-          token.sub=existingUser._id.toString();
+        if(!existingUser){
+          const name= token.name || token.email.split("@")[0];
+
+          existingUser= await User.create({
+            name,
+            email: token.email,
+          })
         }
+        token.sub=existingUser._id.toString();
       }
       return token;
     },
