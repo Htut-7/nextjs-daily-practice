@@ -30,7 +30,7 @@ export async function updatePassword(params: {
         const validatedData=validateBody(params,updatePasswordSchema);
         const {currentPassword, newPassword}=validatedData.data;
 
-        const user=await User.findById(userId).select("passwordHash");
+        const user=await User.findById(userId).select("+passwordHash");
 
         if(!user){
             throw new Error("User not found");

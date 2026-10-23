@@ -73,6 +73,12 @@ async function page({ params }: { params: Promise<{ id: string }> }) {
                   Edit Profile
                 </Link>
               )}
+
+              {isOwnProfile && (
+                <Link href={ROUTES.SECURITY}>
+                  Account Security
+                </Link>
+              )}
             </div>
           </div>
         </section>
